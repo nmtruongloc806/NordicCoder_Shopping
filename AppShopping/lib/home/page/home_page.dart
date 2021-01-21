@@ -38,19 +38,20 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     core.init(context);
     Size sizeWidget = core.screenSize;
+    final linearGradient = new LinearGradient(
+        colors: [
+          const Color(0xFF1f7ac4),
+          const Color(0xFF4ec4f0),
+        ],
+        begin: const FractionalOffset(0.0, 0.0),
+        end: const FractionalOffset(1.0, 0.0),
+        stops: [0.0, 1.0],
+        tileMode: TileMode.clamp);
     BoxDecoration backgroundAppBar = BoxDecoration(
-      gradient: new LinearGradient(
-          colors: [
-            const Color(0xFF1f7ac4),
-            const Color(0xFF4ec4f0),
-          ],
-          begin: const FractionalOffset(0.0, 0.0),
-          end: const FractionalOffset(1.0, 0.0),
-          stops: [0.0, 1.0],
-          tileMode: TileMode.clamp),
+      gradient: linearGradient,
     );
     return WidgetScreen(
-      heightAppBar: 100,
+      heightAppBar: 80,
       appBarBoxDecoration: backgroundAppBar,
       appBar: Container(
         decoration: backgroundAppBar,
@@ -84,13 +85,15 @@ class _HomePageState extends State<HomePage> {
                           Expanded(
                             child: Padding(
                               padding: const EdgeInsets.only(top: 15),
-                              child: TextField(
-                                style:
-                                    TextStyle(fontSize: core.getFontSize(14)),
-                                textAlign: TextAlign.start,
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: "Tìm kiếm tên.."),
+                              child: Center(
+                                child: TextField(
+                                  style:
+                                      TextStyle(fontSize: core.getFontSize(14)),
+                                  textAlign: TextAlign.start,
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: "Tìm kiếm tên.."),
+                                ),
                               ),
                             ),
                           )
@@ -125,9 +128,8 @@ class _HomePageState extends State<HomePage> {
           child: StreamBuilder<HomeModel>(
               stream: bloc.streamHome.stream,
               builder: (context, snapshot) {
-                if (snapshot.hasData)
-                  if(snapshot.data.data!=null)
-                    return Column(
+                if (snapshot.hasData) if (snapshot.data.data != null)
+                  return Column(
                     children: [
                       CarouselSlider(
                         items: itemCarouselSlider(snapshot.data.data.sliders),
@@ -140,14 +142,18 @@ class _HomePageState extends State<HomePage> {
                           initialPage: 1,
                         ),
                       ),
-                      SizedBox(height: 10.0,),
-                      WidgetDichVuCanhBao(dataDichVuCanhBao: snapshot.data.data.services,),
-                      WidgetDanhMucSanPham(dataCategories: snapshot.data.data.categories,buildContext: context,)
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      WidgetDichVuCanhBao(
+                        dataDichVuCanhBao: snapshot.data.data.services,
+                      ),
+                      WidgetDanhMucSanPham(
+                        dataCategories: snapshot.data.data.categories,
+                        buildContext: context,
+                      )
                     ],
                   );
-                  else{
-                    return SizedBox();
-                  }
                 return WidgetLoading();
               }),
         ),
@@ -160,10 +166,11 @@ class _HomePageState extends State<HomePage> {
     for (var item in data) {
       listWidget.add(ClipRRect(
           borderRadius: BorderRadius.circular(5.0),
-          child: Image(image: NetworkImage(CoreUrlImage + item.image),fit: BoxFit.cover,)));
+          child: Image(
+            image: NetworkImage(CoreUrlImage + item.image),
+            fit: BoxFit.cover,
+          )));
     }
     return listWidget;
   }
-
-
 }
